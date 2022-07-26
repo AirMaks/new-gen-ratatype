@@ -60,11 +60,26 @@ body {
         letter-spacing: 2px;
         position: relative;
 
-        .error-text {
+        .red {
+            background-color: #c00;
+        }
+
+        .info {
             position: absolute;
             top: -40px;
+            display: flex;
+        }
+
+        .num-of-symbols {
             font-size: 18px;
             color: #fcff33;
+        }
+
+        .error-text, .timer, .letters-per-min {
+            
+            font-size: 18px;
+            color: #fcff33;
+            margin-right: 50px;
         }
 
         .left, .right {
@@ -73,7 +88,7 @@ body {
 
         .completed {
             display: inline;
-            background-color: #ccc;
+           background-color: #ccc;
         }
 
         .not-completed {
