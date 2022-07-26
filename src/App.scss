@@ -1,3 +1,83 @@
 body {
-    background: #ccc;
+    background-color: #186ddf;
+    margin: 0;
+    padding: 0;
+}
+.start {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .start-container {
+        width: 500px;
+        height: 400px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #fff;
+        margin-top: 200px;
+        box-shadow: -1px 1px 32px 2px rgba(0,0,0,0.2);
+    
+        button {
+            border: 0;
+            border-radius: 4px;
+            background-color: #25d92f;
+            padding: 4px 10px;
+            color: #fff;
+            width: 150px;
+            height: 50px;
+            font-size: 20px;
+            text-transform: uppercase;
+            cursor: pointer;
+            letter-spacing: 2px;
+        }
+    }
+}
+
+.loader {
+    display: flex;
+    justify-content: center;
+    margin-top: 200px;
+    color: #fff;
+    font-size: 40px;
+}
+.words {
+    display: flex;
+    justify-content: center;
+    margin-top: 200px;
+
+    position: relative;
+
+    
+    .word {
+        margin: 0 auto;
+        color: #333;
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 4px;
+        font-family: cursive;
+        font-size: 30px;
+        letter-spacing: 2px;
+        position: relative;
+
+        .error-text {
+            position: absolute;
+            top: -40px;
+            font-size: 18px;
+            color: #fcff33;
+        }
+
+        .left, .right {
+            display: inline;
+        }
+
+        .completed {
+            display: inline;
+            background-color: #ccc;
+        }
+
+        .not-completed {
+            display: inline;
+        }
+    }
 }
