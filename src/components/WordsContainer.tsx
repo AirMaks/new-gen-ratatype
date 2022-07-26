@@ -7,6 +7,7 @@ const WordsContainer = () => {
   const [word, setWord] = useState<any>("");
   const [wordCompleted, setWordCompleted] = useState<any>("");
   const [isRunning, setIsRunning] = useState(false);
+  const [isStartPage, setIsStartPage] = useState(true);
 
   const [lettersPerMin, setLettersPerMin] = useState(0);
   const [numOfSymbols, setNumOfSymbols] = useState(0);
@@ -71,6 +72,17 @@ const WordsContainer = () => {
 
     return () => clearInterval(id);
   }, [isRunning]);
+
+  if (isStartPage) {
+    return (
+      <>
+        <div className="title">Ratatatatype</div>
+        <button className="start-btn" onClick={() => setIsStartPage(false)}>
+          Start
+        </button>
+      </>
+    );
+  }
 
   if (isLoading) {
     return <div className="loader">Loading...</div>;
