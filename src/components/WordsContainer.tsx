@@ -76,34 +76,37 @@ const WordsContainer = () => {
     return <div className="loader">Loading...</div>;
   }
   return (
-    <div className="words">
-      <div className="word">
-        <div className="info">
-          <div className="error-text">{`Errors: ${error}`}</div>
-          <div className="timer">{`Time: ${timer}`}</div>
-          <div className="letters-per-min">{`Symbols/min: ${lettersPerMin}`}</div>
-          <div className="num-of-symbols">{`Number of symbols: ${numOfSymbols}`}</div>
+    <>
+      <div className="title">Ratatatatype</div>
+      <div className="words">
+        <div className="word">
+          <div className="info">
+            <div className="error-text">{`Errors: ${error}`}</div>
+            <div className="timer">{`Time: ${timer}`}</div>
+            <div className="letters-per-min">{`Symbols/min: ${lettersPerMin}`}</div>
+            <div className="num-of-symbols">{`Number of symbols: ${numOfSymbols}`}</div>
+          </div>
+          {wordCompleted && (
+            <div className="left">
+              {[...wordCompleted]?.map((w: any, i: number) => (
+                <span key={i} className="completed">
+                  {w}
+                </span>
+              ))}
+            </div>
+          )}
+          {word && (
+            <div className="right" ref={ref}>
+              {[...word]?.map((w: any, i: number) => (
+                <span key={i} className="not-completed">
+                  {w}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
-        {wordCompleted && (
-          <div className="left">
-            {[...wordCompleted]?.map((w: any, i: number) => (
-              <span key={i} className="completed">
-                {w}
-              </span>
-            ))}
-          </div>
-        )}
-        {word && (
-          <div className="right" ref={ref}>
-            {[...word]?.map((w: any, i: number) => (
-              <span key={i} className="not-completed">
-                {w}
-              </span>
-            ))}
-          </div>
-        )}
       </div>
-    </div>
+    </>
   );
 };
 

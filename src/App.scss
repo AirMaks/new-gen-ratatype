@@ -41,10 +41,18 @@ body {
     color: #fff;
     font-size: 40px;
 }
+
+.title {
+    margin-top: 80px;
+    font-size: 50px;
+    color:#fff;
+    text-align: center;
+    font-family: cursive;
+}
 .words {
     display: flex;
     justify-content: center;
-    margin-top: 200px;
+    margin-top: 100px;
 
     position: relative;
 
