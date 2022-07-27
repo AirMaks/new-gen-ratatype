@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { wordsAPI } from "../store/wordsAPI";
-
+import { checkKeyboard } from "../utils/detectKeyboardLang";
 const WordsContainer = () => {
   const { data: words, refetch, isFetching } = wordsAPI.useFetchWordsQuery(5);
+  const [keyboardIsEng, setKeyboardIsEng] = useState<any>(true);
 
   const [word, setWord] = useState<any>("");
   const [wordCompletedArr, setWordCompletedArr] = useState<any>("");
@@ -27,31 +28,41 @@ const WordsContainer = () => {
     setNumOfSymbols(length);
 
     const keyDownHandler = (event: any) => {
-      event.preventDefault();
+      if (
+        event.key === "Control" ||
+        event.key === "Shift" ||
+        event.key === "Alt"
+      ) {
+        return false;
+      }
 
-      setIsRunning(true);
+      if (checkKeyboard(event)) {
+        setIsRunning(true);
+        setKeyboardIsEng(true);
+        if (ref?.current?.textContent[0] === event.key) {
+          ref?.current.firstChild?.classList.remove("red");
 
-      if (ref?.current?.textContent[0] === event.key) {
-        ref?.current.firstChild?.classList.remove("red");
+          setWord((prev: any) => {
+            setWordCompletedArr((prev: any) => [
+              ...prev,
+              ref?.current?.textContent[0],
+            ]);
+            let removedFirstChar = prev.join("").substring(1);
 
-        setWord((prev: any) => {
-          setWordCompletedArr((prev: any) => [
-            ...prev,
-            ref?.current?.textContent[0],
-          ]);
-          let removedFirstChar = prev.join("").substring(1);
+            return removedFirstChar.split("");
+          });
 
-          return removedFirstChar.split("");
-        });
+          if (ref?.current?.textContent.length === 1) {
+            setIsRunning(false);
+            setIsFinished(true);
+          }
+        } else {
+          ref?.current?.firstChild?.classList.add("red");
 
-        if (ref?.current?.textContent.length === 1) {
-          setIsRunning(false);
-          setIsFinished(true);
+          setError((error = error + 1));
         }
       } else {
-        ref?.current?.firstChild?.classList.add("red");
-
-        setError((error = error + 1));
+        setKeyboardIsEng(false);
       }
     };
 
@@ -140,6 +151,12 @@ const WordsContainer = () => {
               </div>
             )}
           </div>
+
+          {!keyboardIsEng && (
+            <div className="keyboard-error">
+              Change keyboard language to english
+            </div>
+          )}
         </div>
       ) : (
         <div className="finished-modal">
