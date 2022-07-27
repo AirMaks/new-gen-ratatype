@@ -1,8 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { wordsAPI } from "../store/wordsAPI";
 import { checkKeyboard } from "../utils/detectKeyboardLang";
+import Button from "./Button";
+import CompletedWords from "./CompletedWords";
+import FinishedModal from "./FinishedModal";
+import Info from "./Info";
+import KeyboardErrorText from "./KeyboardErrorText";
+import Loader from "./Loader";
+import NotCompletedWords from "./NotCompletedWords";
+import Title from "./Title";
+
 const WordsContainer = () => {
-  const { data: words, refetch, isFetching } = wordsAPI.useFetchWordsQuery(5);
+  const { data: words, refetch, isFetching } = wordsAPI.useFetchWordsQuery(3);
   const [keyboardIsEng, setKeyboardIsEng] = useState<any>(true);
 
   const [word, setWord] = useState<any>("");
@@ -21,6 +30,7 @@ const WordsContainer = () => {
   let [error, setError] = useState(0);
 
   const ref: any = useRef(null);
+
   useEffect(() => {
     const length: any = words?.join(" ").length;
 
@@ -88,102 +98,45 @@ const WordsContainer = () => {
     return () => clearInterval(id);
   }, [isRunning]);
 
-  const next = () => {
-    setError(0);
-    setLettersPerMin(0);
-    setTimer(0);
-    setWord("");
-    setIsFinished(false);
-    setWordCompletedArr([]);
-    refetch();
-  };
-
-  const again = () => {
-    setError(0);
-    setLettersPerMin(0);
-    setTimer(0);
-    setWord(words?.join(" ").split(""));
-    setIsFinished(false);
-    setWordCompletedArr([]);
-  };
-
   if (isStartPage) {
     return (
       <>
-        <div className="title">Ratatatatype</div>
-        <button className="start-btn" onClick={() => setIsStartPage(false)}>
-          Start
-        </button>
+        <Title />
+        <Button {...{ text: "Start", setIsStartPage }} />
       </>
     );
   }
 
   return (
     <>
-      <div className="title">Ratatatatype</div>
+      <Title />
       {isFetching ? (
-        <div className="loader">Loading...</div>
+        <Loader />
       ) : !isFinished ? (
         <div className="words">
-          <div className="info">
-            <div className="error-text">{`Errors: ${error}`}</div>
-            <div className="timer">{`Time: ${timer}`}</div>
-            <div className="letters-per-min">{`Symbols/min: ${lettersPerMin}`}</div>
-            <div className="num-of-symbols">{`Number of symbols: ${numOfSymbols}`}</div>
-          </div>
+          <Info {...{ error, lettersPerMin, timer, numOfSymbols }} />
           <div className="word">
-            {wordCompletedArr && (
-              <div className="left">
-                {[...wordCompletedArr]?.map((w: any, i: number) => (
-                  <span key={i} className="completed">
-                    {w}
-                  </span>
-                ))}
-              </div>
-            )}
-            {word && (
-              <div className="right" ref={ref}>
-                {[...word]?.map((w: any, i: number) => (
-                  <span key={i} className="not-completed">
-                    {w}
-                  </span>
-                ))}
-              </div>
-            )}
+            {wordCompletedArr && <CompletedWords {...{ wordCompletedArr }} />}
+            {word && <NotCompletedWords {...{ word, ref2: ref }} />}
           </div>
 
-          {!keyboardIsEng && (
-            <div className="keyboard-error">
-              Change keyboard language to english
-            </div>
-          )}
+          {!keyboardIsEng && <KeyboardErrorText />}
         </div>
       ) : (
-        <div className="finished-modal">
-          <div className="modal-title">
-            {error > 5 ? "Too many errors 😑" : `Not bad 😀 ${error} mistakes`}
-          </div>
-          <div className="modal-info">
-            <div className="error-box">
-              <div className="num-result">{`${error}`}</div>
-              <div>Errors</div>
-            </div>
-
-            <div className="letters-min-box">
-              <div className="num-result">{`${lettersPerMin}`}</div>
-              <div>Symbols/min</div>
-            </div>
-          </div>
-
-          <div className="buttons">
-            <button className="again" onClick={() => again()}>
-              Again
-            </button>
-            <button className="next" onClick={() => next()}>
-              Next
-            </button>
-          </div>
-        </div>
+        <FinishedModal
+          {...{
+            setLettersPerMin,
+            setError,
+            error,
+            lettersPerMin,
+            setTimer,
+            setWord,
+            setIsFinished,
+            words,
+            refetch,
+            setWordCompletedArr,
+          }}
+        />
       )}
     </>
   );
