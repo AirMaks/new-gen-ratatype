@@ -2,11 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { wordsAPI } from "../store/wordsAPI";
 
 const WordsContainer = () => {
-  const { data: words, isLoading } = wordsAPI.useFetchWordsQuery(7);
+  const { data: words, refetch, isFetching } = wordsAPI.useFetchWordsQuery(5);
 
   const [word, setWord] = useState<any>("");
-  const [wordCompleted, setWordCompleted] = useState<any>("");
+  const [wordCompletedArr, setWordCompletedArr] = useState<any>("");
+
   const [isRunning, setIsRunning] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
+
   const [isStartPage, setIsStartPage] = useState(true);
 
   const [lettersPerMin, setLettersPerMin] = useState(0);
@@ -17,14 +20,11 @@ const WordsContainer = () => {
   let [error, setError] = useState(0);
 
   const ref: any = useRef(null);
-
   useEffect(() => {
     const length: any = words?.join(" ").length;
 
     setWord(words?.join(" ").split(""));
     setNumOfSymbols(length);
-
-    const completedWord: any = [];
 
     const keyDownHandler = (event: any) => {
       event.preventDefault();
@@ -33,19 +33,23 @@ const WordsContainer = () => {
 
       if (ref?.current?.textContent[0] === event.key) {
         ref?.current.firstChild?.classList.remove("red");
-        setWord((prev: any) => {
-          completedWord.push(ref?.current?.textContent[0]);
 
-          const removedFirstChar = prev.join("").substring(1);
+        setWord((prev: any) => {
+          setWordCompletedArr((prev: any) => [
+            ...prev,
+            ref?.current?.textContent[0],
+          ]);
+          let removedFirstChar = prev.join("").substring(1);
 
           return removedFirstChar.split("");
         });
+
         if (ref?.current?.textContent.length === 1) {
           setIsRunning(false);
+          setIsFinished(true);
         }
-        setWordCompleted(completedWord);
       } else {
-        ref?.current.firstChild?.classList.add("red");
+        ref?.current?.firstChild?.classList.add("red");
 
         setError((error = error + 1));
       }
@@ -73,6 +77,25 @@ const WordsContainer = () => {
     return () => clearInterval(id);
   }, [isRunning]);
 
+  const next = () => {
+    setError(0);
+    setLettersPerMin(0);
+    setTimer(0);
+    setWord("");
+    setIsFinished(false);
+    setWordCompletedArr([]);
+    refetch();
+  };
+
+  const again = () => {
+    setError(0);
+    setLettersPerMin(0);
+    setTimer(0);
+    setWord(words?.join(" ").split(""));
+    setIsFinished(false);
+    setWordCompletedArr([]);
+  };
+
   if (isStartPage) {
     return (
       <>
@@ -84,40 +107,67 @@ const WordsContainer = () => {
     );
   }
 
-  if (isLoading) {
-    return <div className="loader">Loading...</div>;
-  }
   return (
     <>
       <div className="title">Ratatatatype</div>
-      <div className="words">
-        <div className="word">
+      {isFetching ? (
+        <div className="loader">Loading...</div>
+      ) : !isFinished ? (
+        <div className="words">
           <div className="info">
             <div className="error-text">{`Errors: ${error}`}</div>
             <div className="timer">{`Time: ${timer}`}</div>
             <div className="letters-per-min">{`Symbols/min: ${lettersPerMin}`}</div>
             <div className="num-of-symbols">{`Number of symbols: ${numOfSymbols}`}</div>
           </div>
-          {wordCompleted && (
-            <div className="left">
-              {[...wordCompleted]?.map((w: any, i: number) => (
-                <span key={i} className="completed">
-                  {w}
-                </span>
-              ))}
-            </div>
-          )}
-          {word && (
-            <div className="right" ref={ref}>
-              {[...word]?.map((w: any, i: number) => (
-                <span key={i} className="not-completed">
-                  {w}
-                </span>
-              ))}
-            </div>
-          )}
+          <div className="word">
+            {wordCompletedArr && (
+              <div className="left">
+                {[...wordCompletedArr]?.map((w: any, i: number) => (
+                  <span key={i} className="completed">
+                    {w}
+                  </span>
+                ))}
+              </div>
+            )}
+            {word && (
+              <div className="right" ref={ref}>
+                {[...word]?.map((w: any, i: number) => (
+                  <span key={i} className="not-completed">
+                    {w}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="finished-modal">
+          <div className="modal-title">
+            {error > 5 ? "Too many errors 😑" : `Not bad 😀 ${error} mistakes`}
+          </div>
+          <div className="modal-info">
+            <div className="error-box">
+              <div className="num-result">{`${error}`}</div>
+              <div>Errors</div>
+            </div>
+
+            <div className="letters-min-box">
+              <div className="num-result">{`${lettersPerMin}`}</div>
+              <div>Symbols/min</div>
+            </div>
+          </div>
+
+          <div className="buttons">
+            <button className="again" onClick={() => again()}>
+              Again
+            </button>
+            <button className="next" onClick={() => next()}>
+              Next
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 };
