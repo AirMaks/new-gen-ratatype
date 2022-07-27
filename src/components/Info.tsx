@@ -1,5 +1,3 @@
-import React from "react";
-
 const Info = (props: any) => {
   return (
     <div className="info">
