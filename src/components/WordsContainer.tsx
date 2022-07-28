@@ -5,16 +5,19 @@ import Button from "./Button";
 import CompletedWords from "./CompletedWords";
 import FinishedModal from "./FinishedModal";
 import Info from "./Info";
+import { KEYBOARD } from "../constants";
 import KeyboardErrorText from "./KeyboardErrorText";
 import Loader from "./Loader";
 import NotCompletedWords from "./NotCompletedWords";
 import Title from "./Title";
+import Keyboard from "./Keyboard";
 
 const WordsContainer = () => {
   const { data: words, refetch, isFetching } = wordsAPI.useFetchWordsQuery(3);
   const [keyboardIsEng, setKeyboardIsEng] = useState<any>(true);
 
   const [word, setWord] = useState<any>("");
+  const [current, setCurrent] = useState<any>("");
   const [wordCompletedArr, setWordCompletedArr] = useState<any>("");
 
   const [isRunning, setIsRunning] = useState(false);
@@ -30,6 +33,7 @@ const WordsContainer = () => {
   let [error, setError] = useState(0);
 
   const ref: any = useRef(null);
+  const ref3: any = useRef(null);
 
   useEffect(() => {
     const length: any = words?.join(" ").length;
@@ -50,7 +54,7 @@ const WordsContainer = () => {
         setIsRunning(true);
         setKeyboardIsEng(true);
         if (ref?.current?.textContent[0] === event.key) {
-          ref?.current.firstChild?.classList.remove("red");
+          ref?.current?.firstChild?.classList.remove("red");
 
           setWord((prev: any) => {
             setWordCompletedArr((prev: any) => [
@@ -69,6 +73,23 @@ const WordsContainer = () => {
         } else {
           ref?.current?.firstChild?.classList.add("red");
 
+          if (event.key == " ") {
+            document
+              .querySelector(".letter-space")
+              ?.classList.add("border-red");
+          }
+          document
+            .querySelector(".letter-" + event.key)
+            ?.classList.add("border-red");
+          setTimeout(() => {
+            document
+              .querySelector(".letter-space")
+              ?.classList.remove("border-red");
+            document
+              .querySelector(".letter-" + event.key)
+              ?.classList.remove("border-red");
+          }, 600);
+
           setError((error = error + 1));
         }
       } else {
@@ -81,7 +102,7 @@ const WordsContainer = () => {
     return () => {
       document.removeEventListener("keydown", keyDownHandler);
     };
-  }, [words]);
+  }, [words, isStartPage]);
 
   useEffect(() => {
     if (isRunning) {
@@ -119,6 +140,7 @@ const WordsContainer = () => {
             {wordCompletedArr && <CompletedWords {...{ wordCompletedArr }} />}
             {word && <NotCompletedWords {...{ word, ref2: ref }} />}
           </div>
+          <Keyboard {...{ word }} />
 
           {!keyboardIsEng && <KeyboardErrorText />}
         </div>
