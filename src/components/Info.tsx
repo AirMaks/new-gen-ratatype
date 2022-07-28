@@ -1,4 +1,6 @@
-const Info = (props: any) => {
+import { memo } from "react";
+
+const Info = memo((props: any) => {
   return (
     <div className="info">
       <div className="error-text">{`Errors: ${props.error}`}</div>
@@ -7,6 +9,6 @@ const Info = (props: any) => {
       <div className="num-of-symbols">{`Number of symbols: ${props.numOfSymbols}`}</div>
     </div>
   );
-};
+});
 
 export default Info;

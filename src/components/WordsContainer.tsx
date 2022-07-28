@@ -1,18 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import { wordsAPI } from "../store/wordsAPI";
-import { checkKeyboard } from "../utils/detectKeyboardLang";
-import Button from "./Button";
+import { detectKeyboardLang } from "../utils/detectKeyboardLang";
+import Button from "./ui/Button";
 import CompletedWords from "./CompletedWords";
 import FinishedModal from "./FinishedModal";
 import Info from "./Info";
 import KeyboardErrorText from "./KeyboardErrorText";
-import Loader from "./Loader";
+import Loader from "./ui/Loader";
 import NotCompletedWords from "./NotCompletedWords";
 import Title from "./Title";
 import Keyboard from "./Keyboard";
 
 const WordsContainer = () => {
-  const { data: words, refetch, isFetching } = wordsAPI.useFetchWordsQuery(3);
+  const { data: words, refetch, isFetching } = wordsAPI.useFetchWordsQuery(5);
   const [keyboardIsEng, setKeyboardIsEng] = useState<any>(true);
 
   const [word, setWord] = useState<any>("");
@@ -32,74 +32,71 @@ const WordsContainer = () => {
 
   const ref: any = useRef(null);
 
+  const keyDownHandler = (event: any) => {
+    if (
+      event.key === "Control" ||
+      event.key === "Shift" ||
+      event.key === "Alt"
+    ) {
+      return false;
+    }
+
+    if (detectKeyboardLang(event)) {
+      setIsRunning(true);
+      setKeyboardIsEng(true);
+      if (ref?.current?.textContent[0] === event.key) {
+        ref?.current?.firstChild?.classList.remove("red");
+
+        setWord((prev: any) => {
+          setWordCompletedArr((prev: any) => [
+            ...prev,
+            ref?.current?.textContent[0],
+          ]);
+          let removedFirstChar = prev.join("").substring(1);
+
+          return removedFirstChar.split("");
+        });
+
+        if (ref?.current?.textContent.length === 1) {
+          setIsRunning(false);
+          setIsFinished(true);
+        }
+      } else {
+        ref?.current?.firstChild?.classList.add("red");
+
+        if (event.key == " ") {
+          document.querySelector(".letter-space")?.classList.add("border-red");
+        }
+        document
+          .querySelector(".letter-" + event.key)
+          ?.classList.add("border-red");
+        setTimeout(() => {
+          document
+            .querySelector(".letter-space")
+            ?.classList.remove("border-red");
+          document
+            .querySelector(".letter-" + event.key)
+            ?.classList.remove("border-red");
+        }, 600);
+
+        setError((error = error + 1));
+      }
+    } else {
+      setKeyboardIsEng(false);
+    }
+  };
   useEffect(() => {
     const length: any = words?.join(" ").length;
 
     setWord(words?.join(" ").split(""));
     setNumOfSymbols(length);
 
-    const keyDownHandler = (event: any) => {
-      if (
-        event.key === "Control" ||
-        event.key === "Shift" ||
-        event.key === "Alt"
-      ) {
-        return false;
-      }
-
-      if (checkKeyboard(event)) {
-        setIsRunning(true);
-        setKeyboardIsEng(true);
-        if (ref?.current?.textContent[0] === event.key) {
-          ref?.current?.firstChild?.classList.remove("red");
-
-          setWord((prev: any) => {
-            setWordCompletedArr((prev: any) => [
-              ...prev,
-              ref?.current?.textContent[0],
-            ]);
-            let removedFirstChar = prev.join("").substring(1);
-
-            return removedFirstChar.split("");
-          });
-
-          if (ref?.current?.textContent.length === 1) {
-            setIsRunning(false);
-            setIsFinished(true);
-          }
-        } else {
-          ref?.current?.firstChild?.classList.add("red");
-
-          if (event.key == " ") {
-            document
-              .querySelector(".letter-space")
-              ?.classList.add("border-red");
-          }
-          document
-            .querySelector(".letter-" + event.key)
-            ?.classList.add("border-red");
-          setTimeout(() => {
-            document
-              .querySelector(".letter-space")
-              ?.classList.remove("border-red");
-            document
-              .querySelector(".letter-" + event.key)
-              ?.classList.remove("border-red");
-          }, 600);
-
-          setError((error = error + 1));
-        }
-      } else {
-        setKeyboardIsEng(false);
-      }
-    };
-
     document.addEventListener("keydown", keyDownHandler);
 
     return () => {
-      document.removeEventListener("keydown", keyDownHandler);
+      document.removeEventListener<any>("keydown", keyDownHandler);
     };
-  }, [words, isStartPage]);
+  }, [words]);
 
   useEffect(() => {
     if (isRunning) {

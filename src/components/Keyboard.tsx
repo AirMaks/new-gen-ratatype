@@ -1,6 +1,7 @@
+import { memo } from "react";
 import { KEYBOARD } from "../constants";
 
-const Keyboard = (props: any) => {
+const Keyboard = memo((props: any) => {
   return (
     <div className="keyboard">
       {KEYBOARD.map((row: any, i: number) => (
@@ -22,6 +23,6 @@ const Keyboard = (props: any) => {
       ))}
     </div>
   );
-};
+});
 
 export default Keyboard;

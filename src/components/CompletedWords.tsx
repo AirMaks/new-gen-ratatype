@@ -1,4 +1,6 @@
-const CompletedWords = (props: any) => {
+import { memo } from "react";
+
+const CompletedWords = memo((props: any) => {
   return (
     <div className="left">
       {[...props.wordCompletedArr]?.map((w: any, i: number) => (
@@ -8,6 +10,6 @@ const CompletedWords = (props: any) => {
       ))}
     </div>
   );
-};
+});
 
 export default CompletedWords;

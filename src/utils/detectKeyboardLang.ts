@@ -1,9 +1,8 @@
-export const checkKeyboard = (e: any) => {
+export const detectKeyboardLang = (e: React.KeyboardEvent<Document>) => {
   let re = /^[a-zA-Z\s]*$/g;
   let a = e.key.match(re);
 
   if (a == null) {
-    // alert("Change keyboard language to english");
     return false;
   }
 

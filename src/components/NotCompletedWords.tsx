@@ -1,4 +1,6 @@
-const NotCompletedWords = (props: any) => {
+import { memo } from "react";
+
+const NotCompletedWords = memo((props: any) => {
   return (
     <div className="right" ref={props.ref2}>
       {[...props.word]?.map((w: any, i: number) => (
@@ -8,6 +10,6 @@ const NotCompletedWords = (props: any) => {
       ))}
     </div>
   );
-};
+});
 
 export default NotCompletedWords;
