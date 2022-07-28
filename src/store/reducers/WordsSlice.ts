@@ -3,16 +3,12 @@ import { IWords } from "../../models/IWords";
 
 interface WordsState {
   words: IWords[];
-  isLoading: boolean;
   error: string;
-  isComplete: boolean;
 }
 
 const initialState: WordsState = {
   words: [],
-  isLoading: false,
   error: "",
-  isComplete: false,
 };
 
 export const wordsSlice = createSlice({
