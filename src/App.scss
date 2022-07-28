@@ -250,3 +250,32 @@ body {
         
     }
 }
+
+@media screen and ( max-width: 600px) {
+    .words {
+        margin-top: 20px;
+        .word {
+        font-size: 14px;
+        }
+
+        .info {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+
+    .keyboard  {
+        margin-top: 40px;
+        .row {
+            .letter {
+                width: 25px;
+                height: 25px;
+                font-size: 12px;
+            }
+
+            .letter-space {
+                width: 200px;
+            }
+        }
+    }
+}

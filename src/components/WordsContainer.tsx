@@ -5,7 +5,6 @@ import Button from "./Button";
 import CompletedWords from "./CompletedWords";
 import FinishedModal from "./FinishedModal";
 import Info from "./Info";
-import { KEYBOARD } from "../constants";
 import KeyboardErrorText from "./KeyboardErrorText";
 import Loader from "./Loader";
 import NotCompletedWords from "./NotCompletedWords";
@@ -17,7 +16,6 @@ const WordsContainer = () => {
   const [keyboardIsEng, setKeyboardIsEng] = useState<any>(true);
 
   const [word, setWord] = useState<any>("");
-  const [current, setCurrent] = useState<any>("");
   const [wordCompletedArr, setWordCompletedArr] = useState<any>("");
 
   const [isRunning, setIsRunning] = useState(false);
@@ -33,7 +31,6 @@ const WordsContainer = () => {
   let [error, setError] = useState(0);
 
   const ref: any = useRef(null);
-  const ref3: any = useRef(null);
 
   useEffect(() => {
     const length: any = words?.join(" ").length;

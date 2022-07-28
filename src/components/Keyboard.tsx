@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
 import { KEYBOARD } from "../constants";
-import { checkKeyboard } from "../utils/detectKeyboardLang";
 
 const Keyboard = (props: any) => {
   return (
