@@ -10,9 +10,15 @@ import Loader from "./ui/Loader";
 import NotCompletedWords from "./NotCompletedWords";
 import Title from "./Title";
 import Keyboard from "./Keyboard";
+import ErrorText from "./ErrorText";
 
 const WordsContainer = () => {
-  const { data: words, refetch, isFetching } = wordsAPI.useFetchWordsQuery(5);
+  const {
+    data: words,
+    refetch,
+    isFetching,
+    error,
+  } = wordsAPI.useFetchWordsQuery(5);
   const [keyboardIsEng, setKeyboardIsEng] = useState<any>(true);
 
   const [word, setWord] = useState<any>("");
@@ -25,10 +31,11 @@ const WordsContainer = () => {
 
   const [lettersPerMin, setLettersPerMin] = useState(0);
   const [numOfSymbols, setNumOfSymbols] = useState(0);
+  console.log(error);
 
   let [timer, setTimer] = useState(0);
   let id: any;
-  let [error, setError] = useState(0);
+  let [errorCount, setErrorCount] = useState(0);
 
   const ref: any = useRef(null);
 
@@ -79,7 +86,7 @@ const WordsContainer = () => {
             ?.classList.remove("border-red");
         }, 600);
 
-        setError((error = error + 1));
+        setErrorCount((errorCount = errorCount + 1));
       }
     } else {
       setKeyboardIsEng(false);
@@ -122,6 +129,15 @@ const WordsContainer = () => {
     );
   }
 
+  if (error) {
+    return (
+      <>
+        <Title />
+        <ErrorText error={error} />;
+      </>
+    );
+  }
+
   return (
     <>
       <Title />
@@ -142,7 +158,7 @@ const WordsContainer = () => {
         <FinishedModal
           {...{
             setLettersPerMin,
-            setError,
+            setErrorCount,
             error,
             lettersPerMin,
             setTimer,

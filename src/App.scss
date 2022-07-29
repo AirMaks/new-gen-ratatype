@@ -251,6 +251,14 @@ body {
     }
 }
 
+.error-fetch {
+    text-align: center;
+    margin-top: 50px;
+    font-family: cursive;
+    color: #aeeb1b;
+    font-size: 30px;
+}
+
 @media screen and ( max-width: 600px) {
     .words {
         margin-top: 20px;
