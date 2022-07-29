@@ -75,14 +75,14 @@ const WordsContainer = () => {
           document.querySelector(".letter-space")?.classList.add("border-red");
         }
         document
-          .querySelector(".letter-" + event.key)
+          .querySelector(`.letter-${event.key}`)
           ?.classList.add("border-red");
         setTimeout(() => {
           document
             .querySelector(".letter-space")
             ?.classList.remove("border-red");
           document
-            .querySelector(".letter-" + event.key)
+            .querySelector(`.letter-${event.key}`)
             ?.classList.remove("border-red");
         }, 600);
 
