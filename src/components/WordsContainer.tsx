@@ -145,7 +145,7 @@ const WordsContainer = () => {
         <Loader />
       ) : !isFinished ? (
         <div className="words">
-          <Info {...{ error, lettersPerMin, timer, numOfSymbols }} />
+          <Info {...{ errorCount, lettersPerMin, timer, numOfSymbols }} />
           <div className="word">
             {wordCompletedArr && <CompletedWords {...{ wordCompletedArr }} />}
             {word && <NotCompletedWords {...{ word, ref2: ref }} />}
@@ -159,7 +159,7 @@ const WordsContainer = () => {
           {...{
             setLettersPerMin,
             setErrorCount,
-            error,
+            errorCount,
             lettersPerMin,
             setTimer,
             setWord,
