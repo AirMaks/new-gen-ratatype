@@ -1,6 +1,6 @@
 const FinishedModal = (props: any) => {
   const next = () => {
-    props.setError(0);
+    props.setErrorCount(0);
     props.setLettersPerMin(0);
     props.setTimer(0);
     props.setWord("");
@@ -10,7 +10,7 @@ const FinishedModal = (props: any) => {
   };
 
   const again = () => {
-    props.setError(0);
+    props.setErrorCount(0);
     props.setLettersPerMin(0);
     props.setTimer(0);
     props.setWord(props.words?.join(" ").split(""));
@@ -20,13 +20,13 @@ const FinishedModal = (props: any) => {
   return (
     <div className="finished-modal">
       <div className="modal-title">
-        {props.error > 5
+        {props.errorCount > 5
           ? "Too many errors 😑"
-          : `Not bad 😀 ${props.error} mistakes`}
+          : `Not bad 😀 ${props.errorCount} mistakes`}
       </div>
       <div className="modal-info">
         <div className="error-box">
-          <div className="num-result">{`${props.error}`}</div>
+          <div className="num-result">{`${props.errorCount}`}</div>
           <div>Errors</div>
         </div>
 
