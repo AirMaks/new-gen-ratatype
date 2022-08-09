@@ -1,9 +1,9 @@
 import { IButton } from "../../types/IButton";
 
-const Button = (props: IButton) => {
+const Button = ({ text, setIsStartPage }: IButton) => {
   return (
-    <button className="start-btn" onClick={() => props.setIsStartPage(false)}>
-      {props.text}
+    <button className="start-btn" onClick={() => setIsStartPage(false)}>
+      {text}
     </button>
   );
 };
