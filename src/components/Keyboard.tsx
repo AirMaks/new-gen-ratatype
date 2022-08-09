@@ -2,7 +2,7 @@ import { memo } from "react";
 import { KEYBOARD } from "../constants";
 import { IKeyboard } from "../types/IKeyboard";
 
-const Keyboard = memo((props: IKeyboard) => {
+const Keyboard = memo(({ word }: IKeyboard) => {
   return (
     <div className="keyboard">
       {KEYBOARD.map((row: any, i: number) => (
@@ -11,8 +11,7 @@ const Keyboard = memo((props: IKeyboard) => {
             <div
               key={`el-${i}`}
               className={`letter letter-${el} ${
-                (props.word && el === props.word[0]) ||
-                (props.word[0] === " " && el === "space")
+                (word && el === word[0]) || (word[0] === " " && el === "space")
                   ? "current"
                   : ""
               }`}
