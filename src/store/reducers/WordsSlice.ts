@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IWords } from "../../models/IWords";
 
 interface WordsState {
-  words: IWords[];
+  words: string[];
   error: string;
 }
 

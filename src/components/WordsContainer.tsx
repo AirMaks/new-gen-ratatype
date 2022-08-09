@@ -11,6 +11,7 @@ import NotCompletedWords from "./NotCompletedWords";
 import Title from "./Title";
 import Keyboard from "./Keyboard";
 import ErrorText from "./ErrorText";
+import { IKeyboardEvent } from "../types/IKeyboardEvent";
 
 const WordsContainer = () => {
   const {
@@ -19,43 +20,39 @@ const WordsContainer = () => {
     isFetching,
     error,
   } = wordsAPI.useFetchWordsQuery(5);
-  const [keyboardIsEng, setKeyboardIsEng] = useState<any>(true);
 
-  const [word, setWord] = useState<any>("");
-  const [wordCompletedArr, setWordCompletedArr] = useState<any>("");
+  const [keyboardIsEng, setKeyboardIsEng] = useState<boolean>(true);
 
-  const [isRunning, setIsRunning] = useState(false);
-  const [isFinished, setIsFinished] = useState(false);
+  const [word, setWord] = useState<string[]>([]);
+  const [wordCompletedArr, setWordCompletedArr] = useState<string[]>([]);
 
-  const [isStartPage, setIsStartPage] = useState(true);
+  const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [isFinished, setIsFinished] = useState<boolean>(false);
 
-  const [lettersPerMin, setLettersPerMin] = useState(0);
-  const [numOfSymbols, setNumOfSymbols] = useState(0);
-  console.log(error);
+  const [isStartPage, setIsStartPage] = useState<boolean>(true);
 
-  let [timer, setTimer] = useState(0);
-  let id: any;
-  let [errorCount, setErrorCount] = useState(0);
+  const [lettersPerMin, setLettersPerMin] = useState<number>(0);
+  const [numOfSymbols, setNumOfSymbols] = useState<number | undefined>(0);
 
-  const ref: any = useRef(null);
+  let [timer, setTimer] = useState<number>(0);
+  let id: ReturnType<typeof setInterval>;
+  let [errorCount, setErrorCount] = useState<number>(0);
 
-  const keyDownHandler = (event: any) => {
-    if (
-      event.key === "Control" ||
-      event.key === "Shift" ||
-      event.key === "Alt"
-    ) {
-      return false;
+  const ref = useRef<any>(null);
+
+  const keyDownHandler = (e: IKeyboardEvent) => {
+    if (e.key === "Control" || e.key === "Shift" || e.key === "Alt") {
+      return true;
     }
-
-    if (detectKeyboardLang(event)) {
+    if (detectKeyboardLang(e)) {
       setIsRunning(true);
       setKeyboardIsEng(true);
-      if (ref?.current?.textContent[0] === event.key) {
+
+      if (ref?.current?.textContent[0] === e.key) {
         ref?.current?.firstChild?.classList.remove("red");
 
-        setWord((prev: any) => {
-          setWordCompletedArr((prev: any) => [
+        setWord((prev: string[]) => {
+          setWordCompletedArr((prev: string[]) => [
             ...prev,
             ref?.current?.textContent[0],
           ]);
@@ -71,18 +68,16 @@ const WordsContainer = () => {
       } else {
         ref?.current?.firstChild?.classList.add("red");
 
-        if (event.key == " ") {
+        if (e.key == " ") {
           document.querySelector(".letter-space")?.classList.add("border-red");
         }
-        document
-          .querySelector(`.letter-${event.key}`)
-          ?.classList.add("border-red");
+        document.querySelector(`.letter-${e.key}`)?.classList.add("border-red");
         setTimeout(() => {
           document
             .querySelector(".letter-space")
             ?.classList.remove("border-red");
           document
-            .querySelector(`.letter-${event.key}`)
+            .querySelector(`.letter-${e.key}`)
             ?.classList.remove("border-red");
         }, 600);
 
@@ -93,15 +88,17 @@ const WordsContainer = () => {
     }
   };
   useEffect(() => {
-    const length: any = words?.join(" ").length;
+    const length: number | undefined = words?.join(" ").length;
+    if (words) {
+      setWord(words?.join(" ").split(""));
+    }
 
-    setWord(words?.join(" ").split(""));
     setNumOfSymbols(length);
 
     document.addEventListener("keydown", keyDownHandler);
 
     return () => {
-      document.removeEventListener<any>("keydown", keyDownHandler);
+      document.removeEventListener("keydown", keyDownHandler);
     };
   }, [words]);
 
@@ -111,8 +108,8 @@ const WordsContainer = () => {
         setTimer(timer++);
       }, 1000);
     } else {
-      if (numOfSymbols !== 0 && timer !== 0) {
-        let speed: any = (numOfSymbols / timer) * 60 || 0;
+      if (numOfSymbols && numOfSymbols !== 0 && timer !== 0) {
+        let speed: number = (numOfSymbols / timer) * 60 || 0;
         setLettersPerMin(Math.round(speed));
       }
     }
@@ -133,7 +130,7 @@ const WordsContainer = () => {
     return (
       <>
         <Title />
-        <ErrorText error={error} />;
+        <ErrorText />;
       </>
     );
   }

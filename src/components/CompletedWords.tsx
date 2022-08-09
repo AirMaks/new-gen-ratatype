@@ -1,6 +1,7 @@
 import { memo } from "react";
+import { ICompletedWords } from "../types/ICompletedWords";
 
-const CompletedWords = memo((props: any) => {
+const CompletedWords = memo((props: ICompletedWords) => {
   return (
     <div className="left">
       {[...props.wordCompletedArr]?.map((w: any, i: number) => (

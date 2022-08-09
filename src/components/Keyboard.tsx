@@ -1,7 +1,8 @@
 import { memo } from "react";
 import { KEYBOARD } from "../constants";
+import { IKeyboard } from "../types/IKeyboard";
 
-const Keyboard = memo((props: any) => {
+const Keyboard = memo((props: IKeyboard) => {
   return (
     <div className="keyboard">
       {KEYBOARD.map((row: any, i: number) => (

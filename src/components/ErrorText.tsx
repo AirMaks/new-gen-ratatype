@@ -1,4 +1,4 @@
-const ErrorText = (props: any) => {
+const ErrorText = () => {
   return <div className="error-fetch">Oops... Something went wrong</div>;
 };
 
