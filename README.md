@@ -6,6 +6,7 @@ Demo: <a href="https://ratatatatype.herokuapp.com/">Click here</a>
 
 Todo:
 
+- Remove querySelectors from project.
 - Typescript: Specify types better.
 - Make less renders.
 - Remake many setStates in functions.
