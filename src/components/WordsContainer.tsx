@@ -12,6 +12,8 @@ import Title from "./Title";
 import Keyboard from "./Keyboard";
 import ErrorText from "./ErrorText";
 import { IKeyboardEvent } from "../types/IKeyboardEvent";
+import { getAllJSDocTagsOfKind } from "typescript";
+import { nextTick } from "process";
 
 const WordsContainer = () => {
   const {
@@ -135,6 +137,24 @@ const WordsContainer = () => {
     );
   }
 
+  const again = () => {
+    setErrorCount(0);
+    setLettersPerMin(0);
+    setTimer(0);
+    if (words) setWord(words?.join(" ").split(""));
+    setIsFinished(false);
+    setWordCompletedArr([]);
+  };
+  const next = () => {
+    setErrorCount(0);
+    setLettersPerMin(0);
+    setTimer(0);
+    setWord([]);
+    setIsFinished(false);
+    setWordCompletedArr([]);
+    refetch();
+  };
+
   return (
     <>
       <Title />
@@ -154,17 +174,11 @@ const WordsContainer = () => {
       ) : (
         <FinishedModal
           {...{
-            setLettersPerMin,
-            setErrorCount,
             errorCount,
             lettersPerMin,
-            setTimer,
-            setWord,
-            setIsFinished,
-            words,
-            refetch,
-            setWordCompletedArr,
           }}
+          again={() => again()}
+          next={() => next()}
         />
       )}
     </>
