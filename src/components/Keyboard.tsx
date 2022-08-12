@@ -5,14 +5,14 @@ import { IKeyboard } from "../types/IKeyboard";
 const Keyboard = memo(({ word }: IKeyboard) => {
   return (
     <div className="keyboard">
-      {KEYBOARD.map((row: any, i: number) => (
-        <div key={`row-${i}`} className="row">
-          {row.map((el: any, i: number) => {
+      {KEYBOARD.map((row: string[]) => (
+        <div key={`${row}`} className="row">
+          {row.map((el: string) => {
             const current =
               el === word[0] || (word[0] === " " && el === "space");
             return (
               <div
-                key={`el-${i}`}
+                key={`${el}`}
                 className={`letter letter-${el} ${current ? "current" : ""}`}
               >
                 {el}

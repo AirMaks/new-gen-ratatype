@@ -6,7 +6,7 @@ const CompletedWords = memo(({ wordCompletedArr }: ICompletedWords) => {
     <>
       {wordCompletedArr.length !== 0 && (
         <div className="left">
-          {[...wordCompletedArr]?.map((w: any, i: number) => (
+          {[...wordCompletedArr]?.map((w: string, i: number) => (
             <span key={i} className="completed">
               {w}
             </span>

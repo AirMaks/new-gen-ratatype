@@ -6,7 +6,7 @@ const NotCompletedWords = memo(({ word, ref2 }: INotCompletedWords) => {
     <>
       {word.length !== 0 && (
         <div className="right" ref={ref2}>
-          {[...word]?.map((w: any, i: number) => (
+          {[...word]?.map((w: string, i: number) => (
             <span key={i} className="not-completed">
               {w}
             </span>
