@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { wordsAPI } from "../store/wordsAPI";
 import { detectKeyboardLang } from "../utils/detectKeyboardLang";
 import Button from "./ui/Button";
@@ -15,7 +15,7 @@ import { IKeyboardEvent } from "../types/IKeyboardEvent";
 import { getAllJSDocTagsOfKind } from "typescript";
 import { nextTick } from "process";
 
-const WordsContainer = () => {
+const WordsContainer = memo(() => {
   const {
     data: words,
     refetch,
@@ -183,6 +183,6 @@ const WordsContainer = () => {
       )}
     </>
   );
-};
+});
 
 export default WordsContainer;
