@@ -12,8 +12,6 @@ import Title from "./Title";
 import Keyboard from "./Keyboard";
 import ErrorText from "./ErrorText";
 import { IKeyboardEvent } from "../types/IKeyboardEvent";
-import { getAllJSDocTagsOfKind } from "typescript";
-import { nextTick } from "process";
 
 const WordsContainer = memo(() => {
   const {
@@ -37,7 +35,7 @@ const WordsContainer = memo(() => {
   const [numOfSymbols, setNumOfSymbols] = useState<number | undefined>(0);
 
   let [timer, setTimer] = useState<number>(0);
-  let id: ReturnType<typeof setInterval>;
+
   let [errorCount, setErrorCount] = useState<number>(0);
 
   const ref = useRef<any>(null);
@@ -70,7 +68,7 @@ const WordsContainer = memo(() => {
       } else {
         ref?.current?.firstChild?.classList.add("red");
 
-        if (e.key == " ") {
+        if (e.key === " ") {
           document.querySelector(".letter-space")?.classList.add("border-red");
         }
         document.querySelector(`.letter-${e.key}`)?.classList.add("border-red");
@@ -105,9 +103,10 @@ const WordsContainer = memo(() => {
   }, [words]);
 
   useEffect(() => {
+    let id: ReturnType<typeof setInterval>;
     if (isRunning) {
       id = setInterval(() => {
-        setTimer(timer++);
+        setTimer((timer) => timer + 1);
       }, 1000);
     } else {
       if (numOfSymbols && numOfSymbols !== 0 && timer !== 0) {
