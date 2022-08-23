@@ -40,54 +40,58 @@ const WordsContainer = memo(() => {
 
   const ref = useRef<any>(null);
 
-  const keyDownHandler = (e: IKeyboardEvent) => {
-    if (e.key === "Control" || e.key === "Shift" || e.key === "Alt") {
-      return true;
-    }
-    if (detectKeyboardLang(e)) {
-      setIsRunning(true);
-      setKeyboardIsEng(true);
+  useEffect(() => {
+    const keyDownHandler = (e: IKeyboardEvent) => {
+      if (e.key === "Control" || e.key === "Shift" || e.key === "Alt") {
+        return true;
+      }
+      if (detectKeyboardLang(e)) {
+        setIsRunning(true);
+        setKeyboardIsEng(true);
 
-      if (ref?.current?.textContent[0] === e.key) {
-        ref?.current?.firstChild?.classList.remove("red");
+        if (ref?.current?.textContent[0] === e.key) {
+          ref?.current?.firstChild?.classList.remove("red");
 
-        setWord((prev: string[]) => {
-          setWordCompletedArr((prev: string[]) => [
-            ...prev,
-            ref?.current?.textContent[0],
-          ]);
-          let removedFirstChar = prev.join("").substring(1);
+          setWord((prev: string[]) => {
+            setWordCompletedArr((prev: string[]) => [
+              ...prev,
+              ref?.current?.textContent[0],
+            ]);
+            let removedFirstChar = prev.join("").substring(1);
 
-          return removedFirstChar.split("");
-        });
+            return removedFirstChar.split("");
+          });
 
-        if (ref?.current?.textContent.length === 1) {
-          setIsRunning(false);
-          setIsFinished(true);
-        }
-      } else {
-        ref?.current?.firstChild?.classList.add("red");
+          if (ref?.current?.textContent.length === 1) {
+            setIsRunning(false);
+            setIsFinished(true);
+          }
+        } else {
+          ref?.current?.firstChild?.classList.add("red");
 
-        if (e.key === " ") {
-          document.querySelector(".letter-space")?.classList.add("border-red");
-        }
-        document.querySelector(`.letter-${e.key}`)?.classList.add("border-red");
-        setTimeout(() => {
-          document
-            .querySelector(".letter-space")
-            ?.classList.remove("border-red");
+          if (e.key === " ") {
+            document
+              .querySelector(".letter-space")
+              ?.classList.add("border-red");
+          }
           document
             .querySelector(`.letter-${e.key}`)
-            ?.classList.remove("border-red");
-        }, 600);
+            ?.classList.add("border-red");
+          setTimeout(() => {
+            document
+              .querySelector(".letter-space")
+              ?.classList.remove("border-red");
+            document
+              .querySelector(`.letter-${e.key}`)
+              ?.classList.remove("border-red");
+          }, 600);
 
-        setErrorCount((errorCount = errorCount + 1));
+          setErrorCount((errorCount) => errorCount + 1);
+        }
+      } else {
+        setKeyboardIsEng(false);
       }
-    } else {
-      setKeyboardIsEng(false);
-    }
-  };
-  useEffect(() => {
+    };
     const length: number | undefined = words?.join(" ").length;
     if (words) {
       setWord(words?.join(" ").split(""));
